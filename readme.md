@@ -1,11 +1,11 @@
-* OSM Daten importieren
+# OSM Daten importieren
 
 Planetfile to PostGIS-DB:
 
 osm2pgsql -c --slim --database "OSM" -U "postgres" -W -H "gdi-1.manserv.net" -P "7777" australia-latest.osm.pbf
 
 
-* OSM Daten vorbereiten
+# OSM Daten vorbereiten
 
 http://blog.cleverelephant.ca/2015/02/breaking-linestring-into-segments.html
 ```sql
@@ -29,11 +29,11 @@ alter table routing.testrouteexplode add cost float;
 update routing.testrouteexplode
 set cost = st_length(geom);
 ```
-* Graph
+# Graph
 ```sql
 SELECT pgr_createTopology ('routing.testrouteexplode', 0.00001, 'geom', 'id', 'source', 'target');
 ```
-** Alternativ (python)
+## Alternativ (python)
 ```python
 import argparse
 from os import getenv
