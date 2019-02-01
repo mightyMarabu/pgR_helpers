@@ -8,7 +8,7 @@ osm2pgsql -c --slim --database "OSM" -U "postgres" -W -H "gdi-1.manserv.net" -P 
 * OSM Daten vorbereiten
 
 http://blog.cleverelephant.ca/2015/02/breaking-linestring-into-segments.html
-
+```sql
 create table routing.testrouteexplode as
 WITH segments AS (
 SELECT id, ST_MakeLine(lag((pt).geom, 1, NULL) OVER (PARTITION BY id ORDER BY id, (pt).path), (pt).geom) AS geom
@@ -28,13 +28,13 @@ alter table routing.testrouteexplode add cost float;
 
 update routing.testrouteexplode
 set cost = st_length(geom);
-
+```
 * Graph
-
+```sql
 SELECT pgr_createTopology ('routing.testrouteexplode', 0.00001, 'geom', 'id', 'source', 'target');
-
+```
 ** Alternativ (python)
-
+```python
 import argparse
 from os import getenv
 import psycopg2
@@ -94,5 +94,5 @@ cur.execute("""UPDATE routing.australianroads_vertices_pgr
 
 conn.commit()
 
-
+```
 
