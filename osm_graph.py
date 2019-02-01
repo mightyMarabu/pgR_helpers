@@ -39,35 +39,29 @@ cur.execute("DROP TABLE IF EXISTS routing.preparedforrouting;\
             select old_id,(st_dump(st_linemerge(st_union(geom)))).geom from routing.testrouteexplode group by old_id;")
 print("routing table created")
 
+cur.execute("alter table routing.preparedforrouting add source int;\
+            alter table routing.preparedforrouting add target int;\
+            alter table routing.preparedforrouting add cost float;")
+print("columns added")
 
-#alter table routing.testrouteexplode add source int;
-#alter table routing.testrouteexplode add target int;
-#alter table routing.testrouteexplode add cost float;
+cur.execute("update routing.preparedforrouting\
+            set cost = st_length(geom);")
+print("cost updated")
 
-#update routing.testrouteexplode
-#set cost = st_length(geom);")
+# create graph
 
-##################################################################################
-"""
-#cur.execute("SELECT MIN(id), MAX(id) FROM routing.roads;")
-#cur.execute("SELECT MIN(id), MAX(id) FROM routing.belgiumroads;")
-cur.execute("SELECT MIN(id), MAX(id) FROM routing.australianroads;")
-
+cur.execute("SELECT MIN(id), MAX(id) FROM routing.preparedforrouting;")
 
 min_id, max_id = cur.fetchone()
-print("there are %s - %s edges to be processed" % (max_id, min_id + 1))
+print("creating graph: there are %s - %s edges to be processed" % (max_id, min_id + 1))
 cur.close()
 
 interval = 50000
 for x in range(min_id, max_id+1, interval):
     cur = conn.cursor()
     cur.execute(
-#    "select pgr_createTopology('routing.roads', 0.001, 'way', 'osm_id', rows_where:='osm_id>=%s and osm_id<%s');" % (x, x + interval)
-#    "select pgr_createTopology('routing.roads', 0.00001, 'way', 'id', rows_where:='id>=%s and id<%s');" % (x, x + interval)
-#    "select pgr_createTopology('routing.belgiumroads', 0.00001, 'geom', 'id', rows_where:='id>=%s and id<%s');" % (x, x + interval)
-    "select pgr_createTopology('routing.australianroads', 0.00001, 'geom', 'id', rows_where:='id>=%s and id<%s');" % (x, x + interval)
-
-)
+    "select pgr_createTopology('routing.preparedforrouting', 0.00001, 'geom', 'id', rows_where:='id>=%s and id<%s');" % (x, x + interval)
+    )
     conn.commit()
     x_max = x + interval - 1
     if x_max > max_id:
@@ -75,12 +69,12 @@ for x in range(min_id, max_id+1, interval):
     print("edges %s - %s have be processed" % (x, x_max))
 
 cur = conn.cursor()
-cur.execute("""ALTER TABLE routing.australianroads_vertices_pgr
+cur.execute("""ALTER TABLE routing.preparedforrouting_vertices_pgr
   ADD COLUMN IF NOT EXISTS lat float8,
   ADD COLUMN IF NOT EXISTS lon float8;""")
 
-cur.execute("""UPDATE routing.australianroads_vertices_pgr
+cur.execute("""UPDATE routing.preparedforrouting_vertices_pgr
   SET lat = ST_Y(the_geom),
       lon = ST_X(the_geom);""")
-"""
+
 conn.commit()
