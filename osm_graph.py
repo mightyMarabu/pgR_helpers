@@ -23,19 +23,22 @@ cur = conn.cursor()
 print("connected to database")
 print("preparing data")
 
-cur.execute("create table routing.testrouteexplode as \
+cur.execute("DROP TABLE IF EXISTS routing.testrouteexplode;\
+            create table routing.testrouteexplode as\
             WITH segments AS (\
             SELECT id, ST_MakeLine(lag((pt).geom, 1, NULL) OVER (PARTITION BY id ORDER BY id, (pt).path), (pt).geom) AS geom\
             FROM (SELECT id, ST_DumpPoints(geom) AS pt FROM routing.testroute) as dumps)\
-            SELECT * FROM segments WHERE geom IS NOT NULL;)
-print ("explode table created")
+            SELECT * FROM segments WHERE geom IS NOT NULL;")
+print("explode table created")
 
 cur.execute("alter table routing.testrouteexplode add old_id int;\
             alter table routing.testrouteexplode drop column id;\
             alter table routing.testrouteexplode add id serial;")
-cur.execute("create table rouring.preparedforrouting as \
-            select old_id,(st_dump(st_linemerge(st_union(geom)))).geom from routing.testrouteexplode group by old_id;)"
-print ("routing table created")
+cur.execute("DROP TABLE IF EXISTS routing.preparedforrouting;\
+            create table routing.preparedforrouting as \
+            select old_id,(st_dump(st_linemerge(st_union(geom)))).geom from routing.testrouteexplode group by old_id;")
+print("routing table created")
+
 
 #alter table routing.testrouteexplode add source int;
 #alter table routing.testrouteexplode add target int;
