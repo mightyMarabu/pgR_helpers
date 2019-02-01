@@ -32,11 +32,13 @@ cur.execute("DROP TABLE IF EXISTS routing.testrouteexplode;\
 print("explode table created")
 
 cur.execute("alter table routing.testrouteexplode add old_id int;\
+            update routing.testrouteexplode\
+                    set old_id = id\
             alter table routing.testrouteexplode drop column id;\
             alter table routing.testrouteexplode add id serial;")
 cur.execute("DROP TABLE IF EXISTS routing.preparedforrouting;\
             create table routing.preparedforrouting as \
-            select old_id,(st_dump(st_linemerge(st_union(geom)))).geom from routing.testrouteexplode group by old_id;")
+            select old_id as id,(st_dump(st_linemerge(st_union(geom)))).geom from routing.testrouteexplode group by old_id;")
 print("routing table created")
 
 cur.execute("alter table routing.preparedforrouting add source int;\
