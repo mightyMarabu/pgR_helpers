@@ -3,6 +3,9 @@
 import argparse
 from os import getenv
 import psycopg2
+import time
+
+ts_start = time.time()
 
 #parser = argparse.ArgumentParser()
 #parser.add_argument("-H", "--host", help="host location of postgres database", type=str)
@@ -21,24 +24,35 @@ conn = psycopg2.connect(
 )
 cur = conn.cursor()
 print("connected to database")
+
 print("preparing data")
+
+cur.execute("DROP TABLE IF EXISTS routing.route;\
+            create table routing.route as\
+            SELECT *, ST_Transform(ST_SetSRID(way,900913),3112) as geom \
+            FROM planet_osm_roads where highway is not null and highway not in ('path', 'track');\
+            ALTER TABLE routing.route ADD id serial;\
+            ALTER TABLE routing.route DROP COLUMN way;")
+print("route table created")
 
 cur.execute("DROP TABLE IF EXISTS routing.testrouteexplode;\
             create table routing.testrouteexplode as\
             WITH segments AS (\
             SELECT id, ST_MakeLine(lag((pt).geom, 1, NULL) OVER (PARTITION BY id ORDER BY id, (pt).path), (pt).geom) AS geom\
-            FROM (SELECT id, ST_DumpPoints(geom) AS pt FROM routing.testroute) as dumps)\
+            FROM (SELECT id, ST_DumpPoints(geom) AS pt FROM routing.route) as dumps)\
             SELECT * FROM segments WHERE geom IS NOT NULL;")
+#            SELECT UpdateGeometrySRID('routing','testrouteexplode','geom',900913);")
+
 print("explode table created")
 
 cur.execute("alter table routing.testrouteexplode add old_id int;\
-            update routing.testrouteexplode\
-                    set old_id = id\
+                update routing.testrouteexplode set old_id = id;\
             alter table routing.testrouteexplode drop column id;\
             alter table routing.testrouteexplode add id serial;")
 cur.execute("DROP TABLE IF EXISTS routing.preparedforrouting;\
             create table routing.preparedforrouting as \
-            select old_id as id,(st_dump(st_linemerge(st_union(geom)))).geom from routing.testrouteexplode group by old_id;")
+            select old_id::int as id,(st_dump(st_linemerge(st_union(geom)))).geom from routing.testrouteexplode group by old_id;")
+#            SELECT UpdateGeometrySRID('routing','preparedforrouting','geom',900913);")
 print("routing table created")
 
 cur.execute("alter table routing.preparedforrouting add source int;\
@@ -49,6 +63,7 @@ print("columns added")
 cur.execute("update routing.preparedforrouting\
             set cost = st_length(geom);")
 print("cost updated")
+
 
 # create graph
 
