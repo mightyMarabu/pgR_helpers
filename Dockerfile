@@ -15,7 +15,7 @@ RUN apt-get update \
            postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts=$POSTGIS_VERSION \
            postgis=$POSTGIS_VERSION \
            python3 postgresql-plpython3-$PG_MAJOR \
-           python3-requests python3-numpy
+           python3-requests python3-numpy \
       wget \
       postgresql-$PG_MAJOR-pgrouting && \
     rm -rf /var/lib/apt/lists/*
