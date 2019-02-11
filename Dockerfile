@@ -20,6 +20,8 @@ RUN apt-get update \
       postgresql-$PG_MAJOR-pgrouting && \
 #      postgresql-plpython3-$PG_MAJOR && \
     rm -rf /var/lib/apt/lists/*
+    
+RUN apt-get -y install python3 postgresql-plpython3-$PG_MAJOR    
 
 #RUN mkdir -p /docker-entrypoint-initdb.d/
 #COPY ./initdb-pgrouting.sh /docker-entrypoint-initdb.d/routing.sh
