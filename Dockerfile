@@ -20,11 +20,18 @@ RUN apt-get update \
            python3 postgresql-plpython3-$PG_MAJOR \
            python3-requests python3-numpy \
       wget \
-      postgresql-$PG_MAJOR-pgrouting && \
-    rm -rf /var/lib/apt/lists/*
+      postgresql-$PG_MAJOR-pgrouting && 
+#    rm -rf /var/lib/apt/lists/*
+
+#Env fdw
+RUN apt-get install libjson-c-dev libjson-c2 libprotobuf-c-dev libprotobuf-c-compiler \
+            libprotobuf-c1 zlib1g-dev zlib1g sudo make install
 
 #OSM_fdw
 RUN pgxn install osm_fdw   
+
+RUN apt-get purge -y --auto-remove $BUILD_TOOLS \
+   && rm -rf /var/lib/apt/lists/*
 
 #RUN mkdir -p /docker-entrypoint-initdb.d/
 #COPY ./initdb-pgrouting.sh /docker-entrypoint-initdb.d/routing.sh
