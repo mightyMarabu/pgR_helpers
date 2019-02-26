@@ -7,6 +7,8 @@ ENV PGROUTING_VERSION 2.5.2
 ENV POSTGIS_MAJOR 2.5
 ENV POSTGIS_VERSION 2.5.1+dfsg-1.pgdg90+1
 
+ENV BUILD_TOOLS="cmake make gcc libtool git pgxnclient postgresql-server-dev-$PG_MAJOR"
+
 #ENV PLPYTHON_VERSION 10.6-1.pgdg18.04+1
 
 # python extension
