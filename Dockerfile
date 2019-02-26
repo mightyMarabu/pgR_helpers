@@ -27,7 +27,7 @@ RUN apt-get update \
 #    rm -rf /var/lib/apt/lists/*
 
 #Env fdw
-RUN apt-get install libjson-c-dev libjson-c2 libprotobuf-c-dev protobuf-c-compiler \
+RUN apt-get install libjson-c-dev libjson-c3 libprotobuf-c-dev protobuf-c-compiler \
             libprotobuf-c1 zlib1g-dev zlib1g
 
 #OSM_fdw
