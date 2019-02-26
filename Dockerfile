@@ -27,8 +27,8 @@ RUN apt-get update \
 #    rm -rf /var/lib/apt/lists/*
 
 #Env fdw
-RUN apt-get install libjson-c-dev libjson-c2 libprotobuf-c-dev libprotobuf-c-compiler \
-            libprotobuf-c1 zlib1g-dev zlib1g sudo make install
+RUN apt-get install libjson-c-dev libjson-c2 libprotobuf-c-dev protobuf-c-compiler \
+            libprotobuf-c1 zlib1g-dev zlib1g
 
 #OSM_fdw
 RUN pgxn install osm_fdw   
