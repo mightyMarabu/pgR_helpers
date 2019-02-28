@@ -2,7 +2,7 @@
 
 Planetfile to PostGIS-DB:
 
-osm2pgsql -c --slim --database "OSM" -U "postgres" -W -H "gdi-1.manserv.net" -P "7777" australia-latest.osm.pbf
+osm2pgsql -c --slim --database "OSM" -U "postgres" -W -H "host" -P "port" australia-latest.osm.pbf
 
 
 # OSM Daten vorbereiten
