@@ -6,4 +6,4 @@ getting started with pg routing
 
 dealing with 'big-data'
 
---> [routing somewhere](example_bigdata.md)
+--> [routing somewhere](example_bigdata_routing.md)
