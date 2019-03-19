@@ -1,9 +1,13 @@
 # Summary
 
-getting started with pg routing 
+### set up database
+
+--> [build your container](Dockerfile)
+
+### getting started with pg routing 
 
 --> [routing in HH](example_hh.md)
 
-dealing with 'big-data'
+#### dealing with 'big-data'
 
 --> [routing somewhere](example_bigdata_routing.md)
