@@ -4,6 +4,12 @@
 
 --> [build your container](Dockerfile)
 
+or
+
+```
+docker pull mightymarabu/postgis_pgrouting_python
+```
+
 ### getting started with pg routing 
 
 --> [routing in HH](example_hh.md)
