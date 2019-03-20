@@ -34,3 +34,15 @@ SELECT *
         ) )as r
 on g.id = r.edge;
 ```
+# one to many (cost)
+```sql
+SELECT seq, id1 AS source, id2 AS target, cost FROM pgr_kdijkstraCost(
+    'SELECT id, source, target, cost FROM edge_table',
+    10, array[4,12], false, false
+);
+```
+# one to many (path / spidergraph)
+```sql
+
+```
+
