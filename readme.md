@@ -16,4 +16,4 @@ docker pull mightymarabu/postgis_pgrouting_python
 
 #### dealing with 'big-data'
 
---> [routing somewhere](example_bigdata_routing.md)
+--> [routing anywhere](example_bigdata_routing.md)
