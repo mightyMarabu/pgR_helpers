@@ -36,13 +36,22 @@ on g.id = r.edge;
 ```
 # one to many (cost)
 ```sql
-SELECT seq, id1 AS source, id2 AS target, cost FROM pgr_kdijkstraCost(
-    'SELECT id, source, target, cost FROM edge_table',
-    10, array[4,12], false, false
-);
+SELECT seq, id1 AS source, id2 AS target, cost
+FROM pgr_kdijkstraCost(
+                'SELECT id::int, source::int4, target::int4, cost::float8 FROM planet_osm_roads where cost >= 0',
+                34, array [874,754], false, false
+        );		
 ```
 # one to many (path / spidergraph)
 ```sql
-
+select distinct r.*, g.way from planet_osm_roads as g
+inner join
+(
+SELECT seq, id1 AS path, id2 AS edge, cost
+FROM pgr_kdijkstraPath(
+                'SELECT id::int, source::int4, target::int4, cost::float8 FROM planet_osm_roads where cost >= 0',
+                34, array [874,754], false, false
+        )) as r
+		on g.source = r.edge;
 ```
 
