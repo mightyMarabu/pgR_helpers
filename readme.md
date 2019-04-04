@@ -7,7 +7,7 @@
 or
 
 ```
-docker pull mightymarabu/postgis_pgrouting_python
+docker pull mightymarabu/postgresql_extended
 ```
 
 ### getting started with pg routing 
