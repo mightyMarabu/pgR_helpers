@@ -20,6 +20,7 @@ RUN apt-get update \
            python3 postgresql-plpython3-$PG_MAJOR \
            python3-requests python3-numpy \
            postgresql-$PG_MAJOR-pgrouting \
+           postgresql-$PG_MAJOR-pgpointcloud \
            $BUILD_TOOLS
            
 #      wget \
