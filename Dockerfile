@@ -5,7 +5,8 @@ ENV PGROUTING_MAJOR 2.5
 ENV PGROUTING_VERSION 2.5.2
 
 ENV POSTGIS_MAJOR 2.5
-ENV POSTGIS_VERSION 2.5.1+dfsg-1.pgdg90+1
+# ENV POSTGIS_VERSION 2.5.1+dfsg-1.pgdg90+1
+ENV POSTGIS_VERSION 2.5.2+dfsg-1~exp1.pgdg90+1
 
 ENV BUILD_TOOLS="cmake make gcc libtool git pgxnclient postgresql-server-dev-$PG_MAJOR"
 
@@ -20,7 +21,7 @@ RUN apt-get update \
            python3 postgresql-plpython3-$PG_MAJOR \
            python3-requests python3-numpy \
            postgresql-$PG_MAJOR-pgrouting \
-#           postgresql-$PG_MAJOR-pgpointcloud \
+
            $BUILD_TOOLS
            
 #      wget \
