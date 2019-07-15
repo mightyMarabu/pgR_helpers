@@ -17,3 +17,5 @@ docker pull mightymarabu/postgresql_extended
 #### dealing with 'big-data'
 
 --> [routing anywhere](example_bigdata_routing.md)
+
+--> check osm2pgrouting
