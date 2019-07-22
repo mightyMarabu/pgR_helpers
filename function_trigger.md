@@ -16,6 +16,63 @@ $BODY$
 
 # python & pgsql-loops
 
+## python example
+```sql
+CREATE OR REPLACE FUNCTION pymax(
+	a integer,
+	b integer)
+    RETURNS TABLE(x integer, y integer) 
+    LANGUAGE 'plpython3u'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+ import requests
+ return [(a, b), (b, a)]# [{"x": a, "y": b}]
+
+$BODY$;
+```
+## python api request
+```sql
+
+CREATE OR REPLACE FUNCTION routing.use_dts(
+	x double precision,
+	y double precision,
+	maxval double precision DEFAULT 2)
+    RETURNS TABLE(id integer, x double precision, y double precision, dt double precision, distance double precision) 
+    LANGUAGE 'plpython3u'
+
+    COST 100
+    VOLATILE 
+    ROWS 1000
+AS $BODY$
+
+ import requests
+ 
+ API = "https://dts-int-dts-1.dmz.manserv.net/api/Reach"
+ # API = "http://dev-geo-2/drivetimes/api/Reach"
+ params = {
+ 	"lat": y,
+    "lng": x,
+    "maxVal": maxval,
+    "direction": 1,
+    "valuation": 1,
+	"reachReturnType": 0
+ }
+ response = requests.get(API, params = params, verify = False)
+ data = response.json()
+ plpy.notice(response.url)
+ plpy.notice("Count %i" % data["Count"])
+ 
+ f = lambda x: 1 if x < 5 else 2 
+ 
+ result = [(f(item[2]), item[1], item[0], item[2], item[3]) for item in data["Items"]]
+ return result
+
+$BODY$;
+```
 ## multipont-dt
 
 ```sql
