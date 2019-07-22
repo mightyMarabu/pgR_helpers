@@ -14,7 +14,7 @@ where tags->>'amenity'='fuel'
 ## postgres-fdw
 
 ```sql
--- Extension erzeugen/anlegen/aktivieren
+--extension erzeugen/anlegen/aktivieren
 create extension postgres_fdw;
 
 -- foreign Server anlegen
