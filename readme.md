@@ -1,5 +1,7 @@
 # Summary
 
+## routing with postgres
+
 ### set up database
 
 --> [build your container](Dockerfile)
@@ -18,4 +20,11 @@ docker pull mightymarabu/postgresql_extended
 
 --> [routing anywhere](example_bigdata_routing.md)
 
---> check osm2pgrouting
+--> [osm2pgrouting](osm2pgsql)
+
+
+## nice to know
+
+--> [foreign data wrapper](fdw.md)
+
+--> [functions and trigger](function_trigger.md)
