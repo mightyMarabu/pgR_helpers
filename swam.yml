@@ -1,0 +1,83 @@
+# maintainer: sebastian
+version: "3"
+services:
+  primary:
+    image: crunchydata/crunchy-postgres:centos7-10.3-1.8.2
+  #  image: mightymarabu/postgresql_extended:latest
+    environment:
+      - PGHOST=/tmp
+      - MAX_CONNECTIONS=10
+      - MAX_WAL_SENDERS=5
+      - PG_MODE=primary
+      - PG_PRIMARY_USER=primaryuser
+      - PG_PRIMARY_PASSWORD=password
+      - PG_DATABASE=testdb
+      - PG_USER=testuser
+      - PG_PASSWORD=password
+      - PG_ROOT_PASSWORD=password
+      - PG_PRIMARY_PORT=5432
+    volumes:
+      - pg-primary-vol:/pgdata
+    deploy:
+      placement:
+        constraints:
+        - node.labels.type == primary
+#        - node.role == worker
+      resources:
+         limits:
+          cpus: "0.1"
+          memory: 50M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "5432"
+    networks:
+      - supertestnet
+  replica:
+#    image: mightymarabu/postgresql_extended:latest
+    image: crunchydata/crunchy-postgres:centos7-10.3-1.8.2
+    environment:
+    - PGHOST=/tmp
+    - MAX_CONNECTIONS=10
+    - MAX_WAL_SENDERS=5
+    - PG_MODE=replica
+    - PG_PRIMARY_HOST=primary
+    - PG_PRIMARY_PORT=5432
+    - PG_PRIMARY_USER=primaryuser
+    - PG_PRIMARY_PASSWORD=password
+    - PG_DATABASE=testdb
+    - PG_USER=testuser
+    - PG_PASSWORD=password
+    - PG_ROOT_PASSWORD=password
+    volumes:
+    - pg-replica-vol:/pgdata
+    ports:
+    - "5432"
+    networks:
+      - supertestnet
+    deploy:
+      replicas: 2
+      placement:
+        constraints:
+        - node.labels.type != primary
+#        - node.role == worker
+
+  visualizer:
+    image: dockersamples/visualizer:stable
+    ports:
+      - "8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    deploy:
+      placement:
+        constraints: 
+        - node.labels.type == primary
+    networks:
+      - supertestnet
+
+networks:
+  supertestnet:
+
+volumes:
+  pg-primary-vol:
+  pg-replica-vol:
