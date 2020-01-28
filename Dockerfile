@@ -1,4 +1,4 @@
-FROM postgres:110
+FROM postgres:10
 #MAINTAINER Sebastian Schmidt
 
 ENV PGROUTING_MAJOR 2.5
