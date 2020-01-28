@@ -1,6 +1,8 @@
-FROM postgres:10
+FROM postgres:11
 
 LABEL maintainer="Sebastian <sebastian.n.schmidt@gmail.com>"
+
+#ENV PG_MAJOR 11
 
 # pgRouting
 ENV PGROUTING_MAJOR 2.5
@@ -8,7 +10,8 @@ ENV PGROUTING_VERSION 2.5.2
 
 # Postgis
 ENV POSTGIS_MAJOR 2.5
-ENV POSTGIS_VERSION 2.5.1+dfsg-1.pgdg90+1
+#ENV POSTGIS_VERSION 2.5.1+dfsg-1.pgdg90+1
+ENV POSTGIS_VERSION 2.5.3+dfsg-2.pgdg90+1
 
 # ENV PLPYTHON_VERSION 10.6-1.pgdg18.04+1
 
@@ -18,7 +21,7 @@ RUN apt-get update \
    && apt-get install -y --no-install-recommends \
       postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION \
       postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts=$POSTGIS_VERSION \
-      postgis=$POSTGIS_VERSION \
+#      postgis=$POSTGIS_VERSION \
       python3 postgresql-plpython3-$PG_MAJOR \
       python3-requests \
       postgresql-$PG_MAJOR-pgrouting \
