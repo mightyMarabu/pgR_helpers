@@ -1,10 +1,12 @@
-FROM postgres:11
+FROM postgres:12
 #MAINTAINER Sebastian Schmidt
 
 ENV PGROUTING_MAJOR 2.5
 ENV PGROUTING_VERSION 2.5.2
-ENV POSTGIS_MAJOR 2.5
-ENV POSTGIS_VERSION 2.5.2+dfsg-1~exp1.pgdg90+1
+
+ENV POSTGIS_MAJOR 3
+ENV POSTGIS_VERSION 3.0.0+dfsg-2~exp1.pgdg100+1
+
 ENV BUILD_TOOLS="cmake make gcc libtool git pgxnclient postgresql-server-dev-$PG_MAJOR"
 #ENV PLPYTHON_VERSION 10.6-1.pgdg18.04+1
 # python extension
@@ -12,13 +14,10 @@ RUN apt-get update \
       && apt-get install -y --no-install-recommends \
            postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR=$POSTGIS_VERSION \
            postgresql-$PG_MAJOR-postgis-$POSTGIS_MAJOR-scripts=$POSTGIS_VERSION \
-           postgis=$POSTGIS_VERSION \
            python3 postgresql-plpython3-$PG_MAJOR \
            python3-requests python3-numpy \
-           python3-smtplib \
            postgresql-$PG_MAJOR-pgrouting \
-           $BUILD_TOOLS
-           
+           $BUILD_TOOLS        
 #      wget \
 #      postgresql-$PG_MAJOR-pgrouting && 
 #    rm -rf /var/lib/apt/lists/*
@@ -27,7 +26,7 @@ RUN apt-get update \
 ENV OWM_FWD_DEPS="libjson-c-dev libjson-c3 libprotobuf-c-dev protobuf-c-compiler libprotobuf-c1 zlib1g-dev zlib1g"
 RUN apt-get install $OWM_FWD_DEPS -y --no-install-recommends
 #OSM_fdw
-RUN pgxn install osm_fdw
+RUN pgxn install osm_fdw 
 
 RUN apt-get purge -y --auto-remove $BUILD_TOOLS \
    && rm -rf /var/lib/apt/lists/*
